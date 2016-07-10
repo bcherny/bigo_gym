@@ -9,16 +9,19 @@
   "scripts": {
     "build": "rollup -c && npm run html && postcss -c ./postcss.config.json",
     "watch": "rollup -cw & watch \"npm run html\" src/ & postcss -w -c ./postcss.config.json",
-    "html": "cp ./src/index.html ./dist/index.html",
+    "html": "cp -a ./src/index.html ./dist/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Boris Cherny <boris@performancejs.com> (http://performancejs.com/)",
   "license": "MIT",
   "dependencies": {
     "benchmark": "^2.1.0",
+    "lodash": "^4.13.1",
     "plottable": "^2.2.0",
+    "promise-seq": "^2.0.1",
     "react": "^15.2.0",
-    "react-dom": "^15.2.0"
+    "react-dom": "^15.2.0",
+    "tregress": "^1.0.1"
   },
   "devDependencies": {
     "postcss": "^5.0.21",

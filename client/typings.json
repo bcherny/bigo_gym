@@ -1,8 +1,11 @@
 {
   "dependencies": {
     "d3": "registry:npm/d3#3.0.0+20160627165201",
+    "lodash": "registry:npm/lodash#4.0.0+20160701205107",
     "react": "registry:npm/react#15.0.1+20160601175240",
     "react-dom": "registry:npm/react-dom#15.0.1+20160705210405"
   },
-  "globalDependencies": {}
+  "globalDependencies": {
+    "benchmark": "registry:dt/benchmark#1.0.0+20160317120654"
+  }
 }

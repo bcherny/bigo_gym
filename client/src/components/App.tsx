@@ -1,33 +1,32 @@
 import * as React from 'react'
 import {render} from 'react-dom'
-import Chart from './Chart'
 import ListView, {Item} from './ListView'
+import Workbench from './Workbench'
+import ALGOS from '../enums/ALGOS'
 
 interface Props { }
 interface State {
-  algos: Item[]
+  selectedAlgoId: number
 }
 
 export default class App extends React.Component<Props, State> {
 
   state = {
-    algos: [
-      { id: 0, name: 'QuickSort' }
-    ]
+    selectedAlgoId: 0
   }
 
   private onClick(id: number) {
-
+    this.state.selectedAlgoId = id
   }
 
   render() {
     return <div className="App">
       <ListView
-        activeId={0}
-        items={this.state.algos}
+        activeId={this.state.selectedAlgoId}
+        items={ALGOS.map(({name}, id) => ({id, name}))}
         onClick={this.onClick.bind(this) }
       />
-      <Chart />
+      <Workbench algo={ALGOS[this.state.selectedAlgoId]} />
     </div>
   }
 }
