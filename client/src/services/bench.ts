@@ -1,11 +1,19 @@
 import * as Benchmark from 'benchmark'
 import seq from 'promise-seq'
+import {range} from 'lodash'
 import {linear} from 'tregress'
+import {AlgoFn} from '../enums/ALGOS'
+import {InputGeneratorFn} from '../enums/INPUT_GENERATORS'
 
 const CONFIDENCE = .95
 
-function fit(ns) {
-  // TODO: try n2, log(n), nlog(n), 2n also
+interface Fit {
+  r2: number | void
+  type: 'LINEAR' | 'UNDEFINED'
+}
+
+// TODO: try n2, log(n), nlog(n), 2n also
+function fit(ns: [number, number][]): Fit {
   const {r2} = linear(...ns)
   if (r2 > CONFIDENCE) {
     return {
@@ -20,26 +28,49 @@ function fit(ns) {
   }
 }
 
-function big_o(fn, generate_input) {
+function computeInitialCount(fn: AlgoFn, generate_input: InputGeneratorFn): number {
 
-  // TODO: ramp up counts and bail if it takes too long
-  // 10, 50, 100, 500, 1000,
-  // let counts = [10, 50, 100, 500, 1000, 5000, 10000, 20000]
-  let counts = [1000, 1100, 1200, 1300, 1400, 1500]
-  // 10000, 50000, 100000
+  let count = 10
+  let t = 0
 
+  console.info(`Ramping up count, starting at ${count}...`)
+
+  while ((t = time(() => fn(generate_input(count)))) < 1000) {
+    count *= 10
+    console.info(`Ramping up count to ${count}...`)
+  }
+
+  return count
+
+}
+
+function getCounts(fn: AlgoFn, generate_input: InputGeneratorFn): number[] {
+  const start = computeInitialCount(fn, generate_input)
+  return range(start, start*1.1, start*0.1)
+}
+
+// time a function's execution time (in ms)
+function time(fn: Function): number {
+  const a = new Date().getTime()
+  fn()
+  return new Date().getTime() - a
+}
+
+export function bigO(fn: AlgoFn, generate_input: InputGeneratorFn): Promise<[number, number][]> {
+
+  const counts = getCounts(fn, generate_input)
   const times = {}
 
   return seq(counts.map(count => () =>
     new Promise((resolve, reject) => {
-      const bench = new Benchmark(function () {
-        return fn(generate_input(count))
-      }, {
+      const bench = new Benchmark(
+        () => fn(generate_input(count)),
+        {
           onAbort: reject,
-          onComplete: _ => {
+          onComplete: (_: Benchmark.Event) => {
             times[count].end = new Date().getTime()
             const elapsed = times[count].end - times[count].start
-            console.log(` Done (${Math.round(elapsed/1000, 2)}s)\n`)
+            console.info(` Done (${Math.round(elapsed/1000)}s)\n`)
 
             // if this run took >10s, stop here
             // if (times[count].end - times[count].start > 10000) {
@@ -48,18 +79,20 @@ function big_o(fn, generate_input) {
             //   counts.splice(i + 1) // TODO: use recursion instead to simplify this
             // }
 
-            resolve([count, _.target.stats.mean])
+            // TODO: contribute better typings
+            resolve([count, (_.target as Benchmark).stats.mean])
           },
-          onCycle: () => process.stdout.write(`.`),
+          // onCycle: () => process.stdout.write(`.`),
           onError: reject,
           onStart: () => {
             times[count] = {
               start: new Date().getTime(),
               end: null
             }
-            process.stdout.write(`Running for input size ${count} `)
+            console.info(`Running for input size ${count}`)
           }
-      })
+        }
+      )
       bench.run({async: true})
     })
   )).catch(err => {

@@ -1,8 +1,10 @@
 import {random, range} from 'lodash'
 
+export type InputGeneratorFn = (count: number) => number[]
+
 interface InputGenerator {
   name: string
-  fn(count: number): number[]
+  fn: InputGeneratorFn
 }
 
 const INPUT_GENERATORS: InputGenerator[] = [

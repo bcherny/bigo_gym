@@ -1,6 +1,8 @@
+export type AlgoFn = (as: number[]) => number[]
+
 export interface Algo {
   name: string
-  fn(as: number[]): number[]
+  fn: AlgoFn
 }
 
 const ALGOS: Algo[] = [

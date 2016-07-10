@@ -4,10 +4,12 @@ import nodeResolve from 'rollup-plugin-node-resolve'
 
 export default {
   entry: './src/index.tsx',
-  external: ['react', 'react-dom', 'plottable', 'd3'],
+  external: ['benchmark', 'd3', 'lodash', 'react', 'react-dom', 'plottable'],
   dest: './dist/bundle.js',
   format: 'iife',
   globals: {
+    benchmark: 'Benchmark',
+    lodash: '_',
     react: 'React',
     'react-dom': 'ReactDOM',
     plottable: 'Plottable'
