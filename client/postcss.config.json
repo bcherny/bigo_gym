@@ -1,0 +1,14 @@
+{
+  "use": [
+    "postcss-import",
+    "postcss-cssnext",
+    "postcss-inline-svg",
+    "postcss-svgo"
+  ],
+  "input": "./src/index.css",
+  "output": "./dist/bundle.css",
+  "local-plugins": true,
+  "cssnext": {
+    "browsers": "> 2%"
+  }
+}

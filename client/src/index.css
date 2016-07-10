@@ -1,0 +1,47 @@
+* {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#App {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font: 13px/22px "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.App {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.App .ListView {
+  flex: 1;
+}
+
+.App .Chart {
+  flex: 4;
+}
+
+.ListView {
+  background: #272735;
+  list-style: none;
+}
+
+.ListView a {
+  color: #fff;
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+}
+
+.ListView a.--isActive {
+  background: #373748;
+  font-weight: 600;
+}
