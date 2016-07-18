@@ -1,4 +1,6 @@
-import {random, range} from 'lodash'
+// import _ rather than individual methods because we stringify each
+// generator, then execute it in a web worker.
+import * as _ from 'lodash'
 
 export type InputGeneratorFn = (count: number) => number[]
 
@@ -11,8 +13,8 @@ const INPUT_GENERATORS: InputGenerator[] = [
   {
     name: 'Random, uniform',
     fn: function generate_input(count: number): number[] {
-      return range(count).map(() =>
-        random(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER)
+      return _.range(count).map(() =>
+        _.random(Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER)
       )
     }
   }
