@@ -10,8 +10,10 @@ import {bigO, getCounts} from '../services/bench'
 interface Props {
   algo: Algo
 }
+
 interface State {
   data: [number, number, number][]
+  didPressRun: boolean
 }
 
 const hardwareConcurrency: number = (navigator as any).hardwareConcurrency
@@ -26,8 +28,9 @@ function pool<A>(
 
 export default class Workbench extends React.Component<Props, State> {
 
-  state = {
-    data: []
+  state: State = {
+    data: [],
+    didPressRun: false
   }
 
   componentDidMount() {
@@ -38,13 +41,17 @@ export default class Workbench extends React.Component<Props, State> {
       bigO(fn, generate_input, count).then(res => {
         const {data} = this.state
         data[n] = res
-        this.setState({data})
+        this.setState({data} as State)
       })
     ))
   }
   render() {
     return <div className="Workbench">
-      <Graph data={this.state.data} />
+      {
+        this.state.didPressRun
+          ? <Graph data={this.state.data} />
+          : <button className="Button" onClick={() => this.setState({didPressRun: true} as State)}>Start</button>
+      }
     </div>
   }
 }

@@ -16,7 +16,7 @@ export default class App extends React.Component<Props, State> {
   }
 
   private onClick(id: number) {
-    this.state.selectedAlgoId = id
+    this.setState({ selectedAlgoId: id })
   }
 
   render() {

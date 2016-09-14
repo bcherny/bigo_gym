@@ -30,6 +30,17 @@ body {
   position: relative;
 }
 
+.App .Workbench > .Button {
+	height: 60px;
+  position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+	margin: auto;
+	width: 200px;
+}
+
 .App .Workbench > .Chart {
   align-items: center;
   display: flex;
@@ -63,4 +74,12 @@ body {
 .ListView a.--isActive {
   background: #373748;
   font-weight: 600;
+}
+
+.Button {
+  background: #0b94ec;
+  color: #fff;
+  display: block;
+  padding: 10px 20px;
+  text-align: center;
 }

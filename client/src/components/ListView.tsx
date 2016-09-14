@@ -9,7 +9,7 @@ export interface Item {
 interface Props {
   activeId?: number
   items: Item[]
-  onClick(id: number): any
+  onClick<T>(id: number): T
 }
 
 interface State { }
@@ -21,7 +21,7 @@ export default class ListView extends React.Component<Props, State> {
         <li key={id}><a
           className={id === this.props.activeId ? '--isActive' : ''}
           href="#"
-          onClick={this.props.onClick(id) }
+          onClick={() => this.props.onClick(id)}
         >{name}</a></li>
       )}
     </ul>
